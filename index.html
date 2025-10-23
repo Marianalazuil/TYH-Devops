@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Sakura Homepage</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffd6e8, #ffeaf2);
+            overflow-x: hidden;
+        }
+
+        /* Sticky Navbar */
+        nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.85);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+
+        nav h2 {
+            color: #ff5c8d;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #444;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #ff5c8d;
+        }
+
+        /* Sakura Falling Background */
+        .sakura {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: pink;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+            z-index: 0;
+        }
+
+        .sakura::before,
+        .sakura::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: pink;
+            border-radius: 50%;
+        }
+
+        .sakura::before { left: -10px; }
+        .sakura::after { left: 10px; }
+
+        @keyframes fall {
+            0% { transform: translateY(-10%) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            color: #ff5c8d;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            font-size: 1.2em;
+            color: #555;
+            max-width: 500px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            background-color: #ff5c8d;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #e04778;
+            transform: translateY(-3px);
+        }
+
+        /* Floating Flower Cards */
+        .flowers-section {
+            padding: 60px 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 30px 30px 0 0;
+            z-index: 2;
+            position: relative;
+        }
+
+        .flowers-section h2 {
+            color: #ff5c8d;
+            margin-bottom: 40px;
+            font-size: 2em;
+        }
+
+        .flower-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.4s ease;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100%;
+            border-radius: 15px;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .card h3 {
+            color: #ff5c8d;
+            margin: 15px 0 10px;
+        }
+
+        .card p {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            color: #555;
+            font-size: 0.9em;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sakura Background -->
+    <div id="sakura-container"></div>
+
+    <!-- Sticky Navbar -->
+    <nav>
+        <h2>🌸 DevOps Sakura</h2>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#flowers">Flowers</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h1>Welcome to DevOps!</h1>
+        <p> Thet Yadanar Htike Slay Queen.</p>
+        <button class="btn">Explore More</button>
+    </section>
+
+    <!-- Flower Section -->
+    <section id="flowers" class="flowers-section">
+        <h2>Blooming Beauties</h2>
+        <div class="flower-cards">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" alt="Thet">
+                <h3>Pink Sakura</h3>
+                <p>The symbol of renewal and the beauty of fleeting moments.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" alt="Sakura 2">
+                <h3>White Blossoms</h3>
+                <p>Graceful and pure, these petals bring peace to the soul.</p>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=500&q=80" alt="Sakura 3">
+                <h3>Spring Dream</h3>
+                <p>Soft petals floating like dreams carried by the wind.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        © 2025 DevOps Sakura | Designed with 💖 by Thet Yadanar Htike
+    </footer>
+
+    <script>
+        // Create Sakura Petals
+        const container = document.getElementById('sakura-container');
+        for (let i = 0; i < 25; i++) {
+            const petal = document.createElement('div');
+            petal.classList.add('sakura');
+            petal.style.left = Math.random() * 100 + 'vw';
+            petal.style.animationDuration = 6 + Math.random() * 6 + 's';
+            petal.style.animationDelay = Math.random() * 5 + 's';
+            petal.style.transform = `scale(${Math.random() * 0.8 + 0.5})`;
+            container.appendChild(petal);
+        }
+    </script>
+</body>
+</html>
