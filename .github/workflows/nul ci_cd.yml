@@ -4,7 +4,7 @@ import { GitBranch, CheckCircle, AlertCircle, Server, Shield, Eye, Zap, Cloud, D
 export default function CICDPipeline() {
   const stages = [
     {
-      title: "Source Control";
+      title: "Source Control",
       icon: GitBranch,
       color: "bg-purple-500",
       items: ["Git Repository", "Branch Protection", "Pull Requests", "Code Review"]
