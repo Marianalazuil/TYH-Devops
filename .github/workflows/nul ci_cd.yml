@@ -1,0 +1,189 @@
+import React from 'react';
+import { GitBranch, CheckCircle, AlertCircle, Server, Shield, Eye, Zap, Cloud, Database, Users } from 'lucide-react';
+
+export default function CICDPipeline() {
+  const stages = [
+    {
+      title: "Source Control";
+      icon: GitBranch,
+      color: "bg-purple-500",
+      items: ["Git Repository", "Branch Protection", "Pull Requests", "Code Review"]
+    },
+    {
+      title: "Build",
+      icon: Zap,
+      color: "bg-blue-500",
+      items: ["Compile Code", "Dependency Install", "Build Artifacts", "Version Tagging"]
+    },
+    {
+      title: "Test",
+      icon: CheckCircle,
+      color: "bg-green-500",
+      items: ["Unit Tests", "Integration Tests", "Regression Tests", "Accessibility Tests"]
+    },
+    {
+      title: "Security Scan",
+      icon: Shield,
+      color: "bg-red-500",
+      items: ["SAST Analysis", "Dependency Scan", "Container Scan", "Compliance Check"]
+    },
+    {
+      title: "Deploy Staging",
+      icon: Cloud,
+      color: "bg-yellow-500",
+      items: ["Infrastructure Setup", "Deploy Application", "Database Migration", "Config Management"]
+    },
+    {
+      title: "Deploy Production",
+      icon: Server,
+      color: "bg-indigo-500",
+      items: ["Blue-Green Deploy", "Rolling Update", "Health Checks", "Rollback Ready"]
+    },
+    {
+      title: "Monitor",
+      icon: Eye,
+      color: "bg-pink-500",
+      items: ["Performance Metrics", "Log Aggregation", "Alerting", "Energy Monitoring"]
+    }
+  ];
+
+  return (
+    <div className="w-full h-full bg-gradient-to-br from-slate-50 to-slate-100 p-8 overflow-auto">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            NUL University E-Learning Platform
+          </h1>
+          <h2 className="text-xl text-slate-600 mb-4">CI/CD Pipeline Architecture</h2>
+          <div className="flex justify-center gap-6 text-sm">
+            <div className="flex items-center gap-2">
+              <Users className="w-4 h-4 text-blue-600" />
+              <span className="text-slate-700">Stakeholders: IT Staff, Lecturers, Students</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Database className="w-4 h-4 text-green-600" />
+              <span className="text-slate-700">Automated | Secure | Sustainable</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Pipeline Stages */}
+        <div className="relative">
+          {/* Connection Line */}
+          <div className="absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 opacity-30 hidden lg:block" style={{top: '80px'}}></div>
+          
+          {/* Stages Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-6 relative z-10">
+            {stages.map((stage, index) => {
+              const Icon = stage.icon;
+              return (
+                <div key={index} className="bg-white rounded-lg shadow-lg p-4 border-t-4 hover:shadow-xl transition-shadow" style={{borderTopColor: stage.color.replace('bg-', '#').replace('500', '')}}>
+                  <div className="flex flex-col items-center mb-3">
+                    <div className={`${stage.color} p-3 rounded-full mb-2`}>
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="font-bold text-slate-800 text-center">{stage.title}</h3>
+                  </div>
+                  <ul className="space-y-2">
+                    {stage.items.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
+                        <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0"></div>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Key Features */}
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white rounded-lg p-4 shadow border-l-4 border-green-500">
+            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <CheckCircle className="w-5 h-5 text-green-500" />
+              Automation
+            </h4>
+            <p className="text-sm text-slate-600">Eliminates manual updates and ensures consistent deployments</p>
+          </div>
+          
+          <div className="bg-white rounded-lg p-4 shadow border-l-4 border-red-500">
+            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <Shield className="w-5 h-5 text-red-500" />
+              Security
+            </h4>
+            <p className="text-sm text-slate-600">DevSecOps practices with automated security scanning at every stage</p>
+          </div>
+          
+          <div className="bg-white rounded-lg p-4 shadow border-l-4 border-blue-500">
+            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <Users className="w-5 h-5 text-blue-500" />
+              Accessibility
+            </h4>
+            <p className="text-sm text-slate-600">WCAG compliance testing ensures inclusive design for all users</p>
+          </div>
+          
+          <div className="bg-white rounded-lg p-4 shadow border-l-4 border-green-600">
+            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
+              <Zap className="w-5 h-5 text-green-600" />
+              Sustainability
+            </h4>
+            <p className="text-sm text-slate-600">Energy-efficient deployments aligned with UN SDGs</p>
+          </div>
+        </div>
+
+        {/* Tools & Technologies */}
+        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
+          <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">Recommended Tools & Technologies</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div className="p-3 bg-slate-50 rounded border">
+              <p className="font-semibold text-slate-700">Version Control</p>
+              <p className="text-sm text-slate-600 mt-1">GitHub / GitLab</p>
+            </div>
+            <div className="p-3 bg-slate-50 rounded border">
+              <p className="font-semibold text-slate-700">CI/CD Platform</p>
+              <p className="text-sm text-slate-600 mt-1">GitHub Actions / Jenkins / Azure DevOps</p>
+            </div>
+            <div className="p-3 bg-slate-50 rounded border">
+              <p className="font-semibold text-slate-700">Container</p>
+              <p className="text-sm text-slate-600 mt-1">Docker / Kubernetes</p>
+            </div>
+            <div className="p-3 bg-slate-50 rounded border">
+              <p className="font-semibold text-slate-700">Monitoring</p>
+              <p className="text-sm text-slate-600 mt-1">Prometheus / Grafana / ELK Stack</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Process Flow */}
+        <div className="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-lg p-6">
+          <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">Pipeline Trigger Flow</h3>
+          <div className="flex flex-wrap justify-center items-center gap-3">
+            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-purple-300 font-semibold">Developer Push</div>
+            <span className="text-2xl text-slate-400">→</span>
+            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-blue-300 font-semibold">Auto Build</div>
+            <span className="text-2xl text-slate-400">→</span>
+            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-green-300 font-semibold">Auto Test</div>
+            <span className="text-2xl text-slate-400">→</span>
+            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-red-300 font-semibold">Security Scan</div>
+            <span className="text-2xl text-slate-400">→</span>
+            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-yellow-300 font-semibold">Deploy Staging</div>
+            <span className="text-2xl text-slate-400">→</span>
+            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-indigo-300 font-semibold">Approval Gate</div>
+            <span className="text-2xl text-slate-400">→</span>
+            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-pink-300 font-semibold">Deploy Production</div>
+            <span className="text-2xl text-slate-400">→</span>
+            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-green-400 font-semibold">Monitor</div>
+          </div>
+        </div>
+
+        {/* Footer Note */}
+        <div className="mt-6 text-center text-sm text-slate-500">
+          <p>This pipeline addresses manual update issues, improves version control, enables automated testing, and provides performance visibility</p>
+        </div>
+      </div>
+    </div>
+  );
+}
