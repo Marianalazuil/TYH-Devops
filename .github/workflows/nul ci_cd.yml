@@ -1,189 +1,458 @@
-import React from 'react';
-import { GitBranch, CheckCircle, AlertCircle, Server, Shield, Eye, Zap, Cloud, Database, Users } from 'lucide-react';
+pipeline:
+  name: Complete CI/CD Pipeline
+  
+  settings:
+    timeout: 3600
+    failure_strategy: fail_fast
+    notification_channels:
+      - email
+      - slack
+    
+  stages:
+    # Stage 1: Source Control
+    - stage: source_control
+      name: Source Control
+      description: Version control and code repository management
+      auto_trigger: true
+      when: 
+        - on_push
+        - on_pull_request
+      tasks:
+        - name: Git Repository Management
+          description: Clone and manage git repository
+          script: |
+            git clone $REPO_URL
+            git checkout $BRANCH_NAME
+        
+        - name: Branch Protection
+          description: Enforce branch protection rules
+          validations:
+            require_pull_request_reviews: true
+            required_approvers: 2
+            dismiss_stale_reviews: true
+            require_code_owner_reviews: true
+        
+        - name: Pull Request Validation
+          description: Validate PR requirements
+          checks:
+            - pr_title_format
+            - linked_issues
+            - no_merge_conflicts
+        
+        - name: Code Review
+          description: Automated and manual code review
+          tools:
+            - sonarqube
+            - code_climate
+          manual_review_required: true
 
-export default function CICDPipeline() {
-  const stages = [
-    {
-      title: "Source Control",
-      icon: GitBranch,
-      color: "bg-purple-500",
-      items: ["Git Repository", "Branch Protection", "Pull Requests", "Code Review"]
-    },
-    {
-      title: "Build",
-      icon: Zap,
-      color: "bg-blue-500",
-      items: ["Compile Code", "Dependency Install", "Build Artifacts", "Version Tagging"]
-    },
-    {
-      title: "Test",
-      icon: CheckCircle,
-      color: "bg-green-500",
-      items: ["Unit Tests", "Integration Tests", "Regression Tests", "Accessibility Tests"]
-    },
-    {
-      title: "Security Scan",
-      icon: Shield,
-      color: "bg-red-500",
-      items: ["SAST Analysis", "Dependency Scan", "Container Scan", "Compliance Check"]
-    },
-    {
-      title: "Deploy Staging",
-      icon: Cloud,
-      color: "bg-yellow-500",
-      items: ["Infrastructure Setup", "Deploy Application", "Database Migration", "Config Management"]
-    },
-    {
-      title: "Deploy Production",
-      icon: Server,
-      color: "bg-indigo-500",
-      items: ["Blue-Green Deploy", "Rolling Update", "Health Checks", "Rollback Ready"]
-    },
-    {
-      title: "Monitor",
-      icon: Eye,
-      color: "bg-pink-500",
-      items: ["Performance Metrics", "Log Aggregation", "Alerting", "Energy Monitoring"]
-    }
-  ];
+    # Stage 2: Build
+    - stage: build
+      name: Build
+      description: Compile code and create artifacts
+      depends_on: 
+        - source_control
+      when:
+        condition: success
+      tasks:
+        - name: Compile Code
+          description: Compile source code
+          script: |
+            npm install
+            npm run build
+          artifacts:
+            paths:
+              - dist/
+              - build/
+        
+        - name: Dependency Install
+          description: Install project dependencies
+          script: |
+            npm ci --production
+            pip install -r requirements.txt
+          cache:
+            key: $CI_COMMIT_REF_SLUG
+            paths:
+              - node_modules/
+              - .pip_cache/
+        
+        - name: Build Artifacts
+          description: Create deployable artifacts
+          script: |
+            docker build -t $IMAGE_NAME:$VERSION .
+            tar -czf app-$VERSION.tar.gz dist/
+          outputs:
+            - docker_image
+            - tar_archive
+        
+        - name: Version Tagging
+          description: Tag build with version
+          script: |
+            git tag -a v$VERSION -m "Release version $VERSION"
+            docker tag $IMAGE_NAME:$VERSION $IMAGE_NAME:latest
 
-  return (
-    <div className="w-full h-full bg-gradient-to-br from-slate-50 to-slate-100 p-8 overflow-auto">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">
-            NUL University E-Learning Platform
-          </h1>
-          <h2 className="text-xl text-slate-600 mb-4">CI/CD Pipeline Architecture</h2>
-          <div className="flex justify-center gap-6 text-sm">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-blue-600" />
-              <span className="text-slate-700">Stakeholders: IT Staff, Lecturers, Students</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Database className="w-4 h-4 text-green-600" />
-              <span className="text-slate-700">Automated | Secure | Sustainable</span>
-            </div>
-          </div>
-        </div>
+    # Stage 3: Test
+    - stage: test
+      name: Test
+      description: Run automated tests
+      depends_on:
+        - build
+      parallel: true
+      tasks:
+        - name: Unit Tests
+          description: Run unit tests
+          script: |
+            npm run test:unit
+            pytest tests/unit/
+          coverage:
+            threshold: 80
+            report: true
+        
+        - name: Integration Tests
+          description: Run integration tests
+          script: |
+            npm run test:integration
+            pytest tests/integration/
+          services:
+            - postgres:13
+            - redis:6
+        
+        - name: Regression Tests
+          description: Run regression test suite
+          script: |
+            npm run test:regression
+          retry: 2
+        
+        - name: Accessibility Tests
+          description: Run accessibility compliance tests
+          tools:
+            - axe_core
+            - pa11y
+          script: |
+            npm run test:a11y
+          standards:
+            - WCAG_2_1_AA
 
-        {/* Pipeline Stages */}
-        <div className="relative">
-          {/* Connection Line */}
-          <div className="absolute top-20 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-blue-500 to-pink-500 opacity-30 hidden lg:block" style={{top: '80px'}}></div>
-          
-          {/* Stages Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-6 relative z-10">
-            {stages.map((stage, index) => {
-              const Icon = stage.icon;
-              return (
-                <div key={index} className="bg-white rounded-lg shadow-lg p-4 border-t-4 hover:shadow-xl transition-shadow" style={{borderTopColor: stage.color.replace('bg-', '#').replace('500', '')}}>
-                  <div className="flex flex-col items-center mb-3">
-                    <div className={`${stage.color} p-3 rounded-full mb-2`}>
-                      <Icon className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="font-bold text-slate-800 text-center">{stage.title}</h3>
-                  </div>
-                  <ul className="space-y-2">
-                    {stage.items.map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                        <div className="w-1.5 h-1.5 rounded-full bg-slate-400 mt-1.5 flex-shrink-0"></div>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+    # Stage 4: Security Scan
+    - stage: security_scan
+      name: Security Scan
+      description: Security and compliance scanning
+      depends_on:
+        - test
+      allow_failure: false
+      tasks:
+        - name: SAST Analysis
+          description: Static Application Security Testing
+          tools:
+            - sonarqube
+            - snyk
+            - checkmarx
+          script: |
+            sonar-scanner
+            snyk test --severity-threshold=high
+        
+        - name: Dependency Scan
+          description: Scan dependencies for vulnerabilities
+          tools:
+            - npm_audit
+            - safety
+            - dependabot
+          script: |
+            npm audit --audit-level=moderate
+            safety check
+        
+        - name: Container Scan
+          description: Scan container images for vulnerabilities
+          tools:
+            - trivy
+            - clair
+            - anchore
+          script: |
+            trivy image $IMAGE_NAME:$VERSION
+          fail_on:
+            - critical_vulnerabilities
+            - high_vulnerabilities
+        
+        - name: Compliance Check
+          description: Check regulatory compliance
+          standards:
+            - PCI_DSS
+            - GDPR
+            - SOC2
+            - HIPAA
+          script: |
+            compliance-checker --standards=all
 
-        {/* Key Features */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg p-4 shadow border-l-4 border-green-500">
-            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-500" />
-              Automation
-            </h4>
-            <p className="text-sm text-slate-600">Eliminates manual updates and ensures consistent deployments</p>
-          </div>
-          
-          <div className="bg-white rounded-lg p-4 shadow border-l-4 border-red-500">
-            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
-              <Shield className="w-5 h-5 text-red-500" />
-              Security
-            </h4>
-            <p className="text-sm text-slate-600">DevSecOps practices with automated security scanning at every stage</p>
-          </div>
-          
-          <div className="bg-white rounded-lg p-4 shadow border-l-4 border-blue-500">
-            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
-              <Users className="w-5 h-5 text-blue-500" />
-              Accessibility
-            </h4>
-            <p className="text-sm text-slate-600">WCAG compliance testing ensures inclusive design for all users</p>
-          </div>
-          
-          <div className="bg-white rounded-lg p-4 shadow border-l-4 border-green-600">
-            <h4 className="font-bold text-slate-800 mb-2 flex items-center gap-2">
-              <Zap className="w-5 h-5 text-green-600" />
-              Sustainability
-            </h4>
-            <p className="text-sm text-slate-600">Energy-efficient deployments aligned with UN SDGs</p>
-          </div>
-        </div>
+    # Stage 5: Manual Approval for Staging
+    - stage: approve_staging
+      name: Approve Staging Deployment
+      description: Manual approval gate before staging
+      type: manual_approval
+      depends_on:
+        - security_scan
+      approval:
+        required: true
+        timeout: 48h
+        approvers:
+          - team_lead
+          - devops_engineer
+        minimum_approvals: 1
+        notification:
+          - email
+          - slack
+        approval_message: Review security scan results and approve staging deployment
 
-        {/* Tools & Technologies */}
-        <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">Recommended Tools & Technologies</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-            <div className="p-3 bg-slate-50 rounded border">
-              <p className="font-semibold text-slate-700">Version Control</p>
-              <p className="text-sm text-slate-600 mt-1">GitHub / GitLab</p>
-            </div>
-            <div className="p-3 bg-slate-50 rounded border">
-              <p className="font-semibold text-slate-700">CI/CD Platform</p>
-              <p className="text-sm text-slate-600 mt-1">GitHub Actions / Jenkins / Azure DevOps</p>
-            </div>
-            <div className="p-3 bg-slate-50 rounded border">
-              <p className="font-semibold text-slate-700">Container</p>
-              <p className="text-sm text-slate-600 mt-1">Docker / Kubernetes</p>
-            </div>
-            <div className="p-3 bg-slate-50 rounded border">
-              <p className="font-semibold text-slate-700">Monitoring</p>
-              <p className="text-sm text-slate-600 mt-1">Prometheus / Grafana / ELK Stack</p>
-            </div>
-          </div>
-        </div>
+    # Stage 6: Deploy Staging
+    - stage: deploy_staging
+      name: Deploy Staging
+      description: Deploy to staging environment
+      depends_on:
+        - approve_staging
+      environment:
+        name: staging
+        url: https://staging.example.com
+        kubernetes:
+          namespace: staging
+      tasks:
+        - name: Infrastructure Setup
+          description: Provision infrastructure
+          tools:
+            - terraform
+            - ansible
+          script: |
+            terraform init
+            terraform plan -out=tfplan
+            terraform apply tfplan
+        
+        - name: Deploy Application
+          description: Deploy application to staging
+          strategy: rolling_update
+          script: |
+            kubectl apply -f k8s/staging/
+            helm upgrade --install app ./charts/app
+          rollback_on_failure: true
+        
+        - name: Database Migration
+          description: Run database migrations
+          script: |
+            npm run migrate:up
+            python manage.py migrate
+          backup_before: true
+        
+        - name: Config Management
+          description: Apply configuration
+          tools:
+            - consul
+            - vault
+          script: |
+            consul kv import @config/staging.json
+            vault kv put secret/app @secrets/staging.env
 
-        {/* Process Flow */}
-        <div className="mt-8 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-slate-800 mb-4 text-center">Pipeline Trigger Flow</h3>
-          <div className="flex flex-wrap justify-center items-center gap-3">
-            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-purple-300 font-semibold">Developer Push</div>
-            <span className="text-2xl text-slate-400">→</span>
-            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-blue-300 font-semibold">Auto Build</div>
-            <span className="text-2xl text-slate-400">→</span>
-            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-green-300 font-semibold">Auto Test</div>
-            <span className="text-2xl text-slate-400">→</span>
-            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-red-300 font-semibold">Security Scan</div>
-            <span className="text-2xl text-slate-400">→</span>
-            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-yellow-300 font-semibold">Deploy Staging</div>
-            <span className="text-2xl text-slate-400">→</span>
-            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-indigo-300 font-semibold">Approval Gate</div>
-            <span className="text-2xl text-slate-400">→</span>
-            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-pink-300 font-semibold">Deploy Production</div>
-            <span className="text-2xl text-slate-400">→</span>
-            <div className="bg-white px-4 py-2 rounded-lg shadow border-2 border-green-400 font-semibold">Monitor</div>
-          </div>
-        </div>
+    # Stage 7: Staging Validation
+    - stage: staging_validation
+      name: Staging Validation
+      description: Validate staging deployment
+      depends_on:
+        - deploy_staging
+      tasks:
+        - name: Smoke Tests
+          description: Run smoke tests on staging
+          script: |
+            npm run test:smoke -- --env=staging
+        
+        - name: Health Checks
+          description: Verify application health
+          script: |
+            curl -f https://staging.example.com/health
+            kubectl get pods -n staging
 
-        {/* Footer Note */}
-        <div className="mt-6 text-center text-sm text-slate-500">
-          <p>This pipeline addresses manual update issues, improves version control, enables automated testing, and provides performance visibility</p>
-        </div>
-      </div>
-    </div>
-  );
-}
+    # Stage 8: Manual Approval for Production
+    - stage: approve_production
+      name: Approve Production Deployment
+      description: Manual approval gate before production
+      type: manual_approval
+      depends_on:
+        - staging_validation
+      approval:
+        required: true
+        timeout: 72h
+        approvers:
+          - release_manager
+          - engineering_manager
+          - product_owner
+        minimum_approvals: 2
+        notification:
+          - email
+          - slack
+          - pagerduty
+        approval_message: Staging validation passed. Approve production deployment?
+        checklist:
+          - Staging tests passed successfully
+          - Security scans have no critical issues
+          - Change management ticket approved
+          - Rollback plan documented
+          - Communication sent to stakeholders
+
+    # Stage 9: Deploy Production
+    - stage: deploy_production
+      name: Deploy Production
+      description: Deploy to production environment
+      depends_on:
+        - approve_production
+      environment:
+        name: production
+        url: https://example.com
+        kubernetes:
+          namespace: production
+        protection_rules:
+          required_reviewers: 2
+      tasks:
+        - name: Pre-deployment Backup
+          description: Backup production data
+          script: |
+            ./scripts/backup-production.sh
+        
+        - name: Blue-Green Deploy
+          description: Blue-green deployment strategy
+          script: |
+            kubectl apply -f k8s/production/green/
+            kubectl wait --for=condition=ready pod -l env=green
+            kubectl patch service app -p '{"spec":{"selector":{"env":"green"}}}'
+          canary:
+            enabled: true
+            steps:
+              - weight: 10
+                duration: 5m
+              - weight: 50
+                duration: 10m
+              - weight: 100
+        
+        - name: Rolling Update
+          description: Rolling update deployment
+          strategy:
+            type: RollingUpdate
+            rolling_update:
+              max_surge: 1
+              max_unavailable: 0
+          script: |
+            kubectl set image deployment/app app=$IMAGE_NAME:$VERSION
+        
+        - name: Health Checks
+          description: Verify production health
+          script: |
+            curl -f https://example.com/health
+            ./scripts/health-check.sh
+          retry: 3
+          interval: 30s
+        
+        - name: Rollback Ready
+          description: Prepare rollback capability
+          script: |
+            kubectl rollout history deployment/app
+          on_failure:
+            action: auto_rollback
+            script: |
+              kubectl rollout undo deployment/app
+
+    # Stage 10: Post-Deployment Validation
+    - stage: production_validation
+      name: Production Validation
+      description: Validate production deployment
+      depends_on:
+        - deploy_production
+      tasks:
+        - name: Smoke Tests Production
+          description: Run smoke tests on production
+          script: |
+            npm run test:smoke -- --env=production
+        
+        - name: Performance Tests
+          description: Run performance tests
+          tools:
+            - jmeter
+            - k6
+          script: |
+            k6 run performance-tests.js
+          thresholds:
+            response_time_p95: 200ms
+            error_rate: 1%
+
+    # Stage 11: Monitor
+    - stage: monitor
+      name: Monitor
+      description: Continuous monitoring and observability
+      depends_on:
+        - deploy_production
+      continuous: true
+      tasks:
+        - name: Performance Metrics
+          description: Collect and analyze performance metrics
+          tools:
+            - prometheus
+            - grafana
+            - new_relic
+          metrics:
+            - cpu_usage
+            - memory_usage
+            - response_time
+            - throughput
+            - error_rate
+        
+        - name: Log Aggregation
+          description: Aggregate and analyze logs
+          tools:
+            - elk_stack
+            - splunk
+            - datadog
+          script: |
+            filebeat -c filebeat.yml
+        
+        - name: Alerting
+          description: Configure alerts for issues
+          tools:
+            - pagerduty
+            - opsgenie
+            - alertmanager
+          alerts:
+            - name: high_error_rate
+              condition: error_rate > 5%
+              severity: critical
+            - name: high_response_time
+              condition: p95_response_time > 500ms
+              severity: warning
+            - name: pod_crashloop
+              condition: pod_restart_count > 3
+              severity: critical
+        
+        - name: Error Monitoring
+          description: Track and report errors
+          tools:
+            - sentry
+            - rollbar
+            - bugsnag
+          script: |
+            sentry-cli monitor run --environment production
+
+  # Global Settings
+  notifications:
+    on_success:
+      - slack: "#deployments"
+      - email: team@example.com
+    on_failure:
+      - slack: "#alerts"
+      - pagerduty: production-team
+      - email: oncall@example.com
+
+  artifacts:
+    retention:
+      days: 30
+    storage:
+      type: s3
+      bucket: ci-artifacts
+
+  variables:
+    DOCKER_REGISTRY: registry.example.com
+    KUBERNETES_VERSION: "1.27"
+    TERRAFORM_VERSION: "1.6.0"
+    NODE_VERSION: "20"
+    PYTHON_VERSION: "3.11
