@@ -1,0 +1,779 @@
+import React from 'react';
+import { ArrowDown, GitBranch, Shield, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
+
+const StageBox = ({ stage, env, tools, duration, items, color, errors }) => (
+  <div className="mb-6">
+    <div className={`${color} rounded-lg shadow-xl p-5 border-2 border-gray-800`}>
+      <h3 className="text-2xl font-bold text-white mb-2">{stage}</h3>
+      <div className="bg-white/20 rounded px-3 py-1 text-sm text-white mb-3 inline-block">
+        📍 {env}
+      </div>
+      <div className="bg-white/20 rounded px-3 py-1 text-sm text-white mb-3 inline-block ml-2">
+        🔧 {tools}
+      </div>
+      {duration && (
+        <div className="bg-white/20 rounded px-3 py-1 text-sm text-white mb-3 inline-block ml-2">
+          ⏱️ {duration}
+        </div>
+      )}
+      
+      <div className="bg-white rounded-lg p-4 mt-3">
+        <ul className="space-y-2 text-sm text-gray-800">
+          {items.map((item, idx) => (
+            <li key={idx} className="flex items-start gap-2">
+              <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+      
+      {errors && (
+        <div className="bg-red-100 border-2 border-red-600 rounded-lg p-3 mt-3">
+          <p className="font-bold text-red-900 mb-1">❌ Error Handling:</p>
+          <p className="text-sm text-red-800">{errors}</p>
+        </div>
+      )}
+    </div>
+    <div className="flex justify-center my-3">
+      <ArrowDown className="w-8 h-8 text-green-500" />
+    </div>
+  </div>
+);
+
+const DecisionBox = ({ question, successText, errorText, errorDest }) => (
+  <div className="mb-6">
+    <div className="flex items-center justify-center gap-8">
+      <div className="flex-1"></div>
+      <div className="relative">
+        <div className="w-48 h-48 bg-yellow-400 border-4 border-yellow-600 transform rotate-45 flex items-center justify-center shadow-xl">
+          <div className="transform -rotate-45 text-center">
+            <p className="font-bold text-xl text-gray-900">{question}</p>
+          </div>
+        </div>
+      </div>
+      <div className="flex-1"></div>
+    </div>
+    
+    <div className="flex items-start justify-between mt-6 gap-4">
+      <div className="flex-1 bg-red-50 border-2 border-red-500 rounded-lg p-3">
+        <p className="font-bold text-red-900 mb-1">❌ IF FAIL:</p>
+        <p className="text-sm text-red-800">{errorText}</p>
+        <p className="text-xs text-red-700 mt-1 font-semibold">→ {errorDest}</p>
+      </div>
+      
+      <div className="flex items-center">
+        <ArrowDown className="w-8 h-8 text-green-500" />
+      </div>
+      
+      <div className="flex-1 bg-green-50 border-2 border-green-500 rounded-lg p-3">
+        <p className="font-bold text-green-900 mb-1">✅ IF PASS:</p>
+        <p className="text-sm text-green-800">{successText}</p>
+      </div>
+    </div>
+    
+    <div className="flex justify-center my-3">
+      <ArrowDown className="w-8 h-8 text-green-500" />
+    </div>
+  </div>
+);
+
+const ProfessionalDiagram = () => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-8">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Title Card */}
+        <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-8 mb-8 text-white">
+          <h1 className="text-4xl font-bold mb-3">NUL E-Learning Platform</h1>
+          <h2 className="text-2xl mb-4">Complete CI/CD Pipeline Architecture</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+            <div className="bg-white/10 rounded-lg p-3 text-center">
+              <p className="text-3xl font-bold">9</p>
+              <p className="text-sm">Pipeline Stages</p>
+            </div>
+            <div className="bg-white/10 rounded-lg p-3 text-center">
+              <p className="text-3xl font-bold">99.9%</p>
+              <p className="text-sm">Uptime SLA</p>
+            </div>
+            <div className="bg-white/10 rounded-lg p-3 text-center">
+              <p className="text-3xl font-bold">0s</p>
+              <p className="text-sm">Deployment Downtime</p>
+            </div>
+            <div className="bg-white/10 rounded-lg p-3 text-center">
+              <p className="text-3xl font-bold">15K</p>
+              <p className="text-sm">Students Served</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="bg-white rounded-xl shadow-xl p-6 mb-8 border-2 border-gray-300">
+          <h3 className="text-2xl font-bold text-gray-800 mb-4">📖 Pipeline Legend</h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <ArrowDown className="w-6 h-6 text-green-500" />
+              <span className="font-semibold">Success Flow</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-1 bg-red-500 border-2 border-red-600"></div>
+              <span className="font-semibold">Error Rollback</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-1 bg-blue-500 border-dashed border-2 border-blue-600"></div>
+              <span className="font-semibold">Feedback Loop</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-yellow-400 border-2 border-yellow-600 transform rotate-45"></div>
+              <span className="font-semibold">Decision Point</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Branch Strategy */}
+        <div className="bg-white rounded-xl shadow-xl p-6 mb-8 border-2 border-gray-300">
+          <h3 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <GitBranch className="w-6 h-6" />
+            Git Branch Strategy (Trunk-Based Development)
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-blue-50 border-2 border-blue-500 rounded-lg p-4">
+              <p className="font-bold text-blue-900 mb-1">main branch</p>
+              <p className="text-sm text-gray-700">Production-ready code</p>
+              <p className="text-xs text-blue-700 mt-2">Triggers: Full pipeline → Production</p>
+            </div>
+            <div className="bg-yellow-50 border-2 border-yellow-500 rounded-lg p-4">
+              <p className="font-bold text-yellow-900 mb-1">develop branch</p>
+              <p className="text-sm text-gray-700">Integration branch</p>
+              <p className="text-xs text-yellow-700 mt-2">Triggers: Pipeline → Staging only</p>
+            </div>
+            <div className="bg-purple-50 border-2 border-purple-500 rounded-lg p-4">
+              <p className="font-bold text-purple-900 mb-1">feature/* branches</p>
+              <p className="text-sm text-gray-700">Individual features</p>
+              <p className="text-xs text-purple-700 mt-2">Triggers: Build + Test only</p>
+            </div>
+          </div>
+          <div className="mt-4 bg-gray-100 rounded-lg p-3 text-center">
+            <p className="text-sm font-semibold text-gray-800">Workflow: feature/user-auth → develop (PR + review) → main (PR + approval) → Production</p>
+          </div>
+        </div>
+
+        {/* Start */}
+        <div className="flex justify-center mb-6">
+          <div className="bg-green-500 rounded-full w-24 h-24 flex items-center justify-center shadow-xl border-4 border-green-700">
+            <span className="text-white text-2xl font-bold">START</span>
+          </div>
+        </div>
+        <div className="flex justify-center mb-6">
+          <ArrowDown className="w-8 h-8 text-green-500" />
+        </div>
+
+        {/* Stage 1 */}
+        <StageBox 
+          stage="STAGE 1: LOCAL DEVELOPMENT"
+          env="Developer Workstation (LOCAL)"
+          tools="Git Hooks, ESLint, Pylint, GitGuardian"
+          duration="30 seconds"
+          color="bg-gradient-to-br from-purple-600 to-purple-700"
+          items={[
+            "Code linting: ESLint (JavaScript), Pylint (Python)",
+            "Secrets detection: GitGuardian/TruffleHog scan",
+            "Code formatting: Prettier (JS), Black (Python) - auto-format",
+            "Fast unit tests: Jest/Pytest (subset of tests, <30s)"
+          ]}
+          errors="Secrets found, linting errors → Developer fixes locally and re-commits"
+        />
+
+        <DecisionBox 
+          question="Pre-Commit Pass?"
+          successText="Code validated locally, proceed to GitHub"
+          errorText="Secrets detected or linting errors found"
+          errorDest="Loop back to Stage 1 (Developer)"
+        />
+
+        {/* Stage 2 */}
+        <StageBox 
+          stage="STAGE 2: SOURCE CONTROL & CODE REVIEW"
+          env="GitHub Repository + GitHub Actions"
+          tools="GitHub, Pull Requests, Branch Protection"
+          duration="Variable (depends on review)"
+          color="bg-gradient-to-br from-blue-600 to-blue-700"
+          items={[
+            "Create Pull Request: feature/xxx → develop or main",
+            "Automated PR checks: Linting, build preview, test coverage report",
+            "Peer code review: Minimum 1 approval required (branch protection)",
+            "Branch protection: Direct commits blocked, reviews enforced",
+            "Code quality verification: Readability, security, WCAG compliance"
+          ]}
+          errors="Changes requested by reviewers → Back to Stage 1 for fixes"
+        />
+
+        <DecisionBox 
+          question="Code Review Approved?"
+          successText="PR approved, merge triggers full CI/CD pipeline"
+          errorText="Code quality issues, security concerns identified"
+          errorDest="Loop back to Stage 1 (Developer fixes)"
+        />
+
+        {/* Stage 3 */}
+        <StageBox 
+          stage="STAGE 3: BUILD APPLICATION"
+          env="GitHub Actions Runner (Ubuntu Linux)"
+          tools="Node.js 18, Python 3.11, Docker 24, Webpack"
+          duration="5 minutes"
+          color="bg-gradient-to-br from-cyan-600 to-cyan-700"
+          items={[
+            "Install dependencies: npm ci (Node.js), pip install (Python) - uses lock files",
+            "Audit dependencies: npm audit, Safety (Python) - check for vulnerabilities",
+            "Compile frontend: Webpack/Vite bundles JavaScript, minifies CSS",
+            "Compile backend: TypeScript → JavaScript, configuration validation",
+            "Create Docker image: Multi-stage build for optimization",
+            "Version tagging: Semantic versioning (v1.2.3) + Git SHA",
+            "Push artifacts: GitHub Container Registry (ghcr.io)",
+            "Outputs: dist/ (frontend), build/ (backend), Docker image"
+          ]}
+          errors="Compilation errors, missing dependencies → Back to Stage 1"
+        />
+
+        <DecisionBox 
+          question="Build Success?"
+          successText="Artifacts created, Docker image pushed to registry"
+          errorText="Compilation errors, dependency conflicts, Docker build failed"
+          errorDest="Loop back to Stage 1 (Developer)"
+        />
+
+        {/* Stage 4 */}
+        <div className="mb-6">
+          <div className="bg-gradient-to-br from-green-600 to-green-700 rounded-lg shadow-xl p-5 border-2 border-gray-800">
+            <h3 className="text-2xl font-bold text-white mb-2">STAGE 4: AUTOMATED TESTING SUITE</h3>
+            <div className="flex flex-wrap gap-2 mb-3">
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                📍 GitHub Actions (4 Parallel Jobs)
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                🔧 Jest, Pytest, Selenium, Axe-core, k6
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                ⏱️ 8 minutes
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="bg-white rounded-lg p-3">
+                <h4 className="font-bold text-green-900 mb-2">Job 1: Unit Tests</h4>
+                <p className="text-xs text-gray-700 mb-1">Tools: Jest (JS), Pytest (Python)</p>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>• 152 tests for business logic</li>
+                  <li>• Code coverage: 83% (target: 80%)</li>
+                  <li>• Fast execution: Parallel runner</li>
+                </ul>
+              </div>
+              
+              <div className="bg-white rounded-lg p-3">
+                <h4 className="font-bold text-green-900 mb-2">Job 2: Integration Tests</h4>
+                <p className="text-xs text-gray-700 mb-1">Tools: Selenium, Postman/Newman</p>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>• API endpoint testing</li>
+                  <li>• Database operations (PostgreSQL)</li>
+                  <li>• Redis cache integration</li>
+                  <li>• 47 integration tests</li>
+                </ul>
+              </div>
+              
+              <div className="bg-blue-50 rounded-lg p-3 border-2 border-blue-400">
+                <h4 className="font-bold text-blue-900 mb-2">Job 3: E-Learning Tests</h4>
+                <p className="text-xs text-gray-700 mb-1">Custom test scenarios</p>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>• Video upload: 500MB files, format validation</li>
+                  <li>• Assignment submission workflow</li>
+                  <li>• Concurrent users: 500 simultaneous (k6)</li>
+                  <li>• Student/lecturer authentication</li>
+                </ul>
+              </div>
+              
+              <div className="bg-purple-50 rounded-lg p-3 border-2 border-purple-400">
+                <h4 className="font-bold text-purple-900 mb-2">Job 4: Accessibility Tests</h4>
+                <p className="text-xs text-gray-700 mb-1">Tools: Axe-core, Pa11y, NVDA</p>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>• WCAG 2.1 AA compliance (legal requirement)</li>
+                  <li>• Screen reader compatibility</li>
+                  <li>• Keyboard navigation validation</li>
+                  <li>• Color contrast checking</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="bg-red-100 border-2 border-red-600 rounded-lg p-3 mt-3">
+              <p className="font-bold text-red-900 mb-1">❌ Error Handling:</p>
+              <p className="text-sm text-red-800">ANY test failure → Back to Stage 1 (Developer fixes bugs, adds tests, creates new PR)</p>
+            </div>
+          </div>
+          <div className="flex justify-center my-3">
+            <ArrowDown className="w-8 h-8 text-green-500" />
+          </div>
+        </div>
+
+        <DecisionBox 
+          question="All Tests Pass?"
+          successText="199 tests passed, coverage 83%, proceed to security"
+          errorText="Unit test failures, integration issues, E-Learning bugs, accessibility violations"
+          errorDest="Loop back to Stage 1 (Developer)"
+        />
+
+        {/* Stage 5 */}
+        <div className="mb-6">
+          <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-lg shadow-xl p-5 border-2 border-gray-800">
+            <h3 className="text-2xl font-bold text-white mb-2">STAGE 5: SECURITY & COMPLIANCE SCANNING</h3>
+            <div className="flex flex-wrap gap-2 mb-3">
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                📍 GitHub Actions (4 Parallel Security Scans)
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                🔧 SonarQube, Snyk, Trivy, OWASP ZAP
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                ⏱️ 5 minutes
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="bg-white rounded-lg p-3">
+                <h4 className="font-bold text-red-900 mb-2">Scan 1: SAST Analysis</h4>
+                <p className="text-xs text-gray-700 mb-1">Tool: SonarQube/SonarCloud</p>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>• Code quality metrics & technical debt</li>
+                  <li>• Security vulnerabilities: SQL injection, XSS</li>
+                  <li>• Quality gate: 0 critical, 80% coverage</li>
+                </ul>
+              </div>
+              
+              <div className="bg-white rounded-lg p-3">
+                <h4 className="font-bold text-red-900 mb-2">Scan 2: Dependencies</h4>
+                <p className="text-xs text-gray-700 mb-1">Tools: Snyk, npm audit, Safety</p>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>• Known CVEs in dependencies</li>
+                  <li>• Outdated libraries identification</li>
+                  <li>• Threshold: 0 critical/high vulnerabilities</li>
+                </ul>
+              </div>
+              
+              <div className="bg-white rounded-lg p-3">
+                <h4 className="font-bold text-red-900 mb-2">Scan 3: Container Security</h4>
+                <p className="text-xs text-gray-700 mb-1">Tool: Trivy, Aqua Security</p>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>• Docker image vulnerabilities</li>
+                  <li>• Base image security (node:18-alpine)</li>
+                  <li>• Exposed secrets in image layers</li>
+                </ul>
+              </div>
+              
+              <div className="bg-blue-50 rounded-lg p-3 border-2 border-blue-400">
+                <h4 className="font-bold text-blue-900 mb-2">Scan 4: GDPR Compliance</h4>
+                <p className="text-xs text-gray-700 mb-1">Custom compliance tests</p>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>• TLS 1.3 configuration verified</li>
+                  <li>• Data encryption: AES-256 at rest</li>
+                  <li>• RBAC implementation validated</li>
+                  <li>• Student data protection (UK Data Protection Act 2018)</li>
+                  <li>• Data retention policies checked</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="bg-red-200 border-4 border-red-800 rounded-lg p-4 mt-3">
+              <p className="font-bold text-red-900 text-lg mb-1">🚨 CRITICAL: Error Handling</p>
+              <p className="text-sm text-red-900">Critical/High vulnerabilities found → <b>Pipeline STOPS immediately</b> → Back to Stage 1 (MUST FIX before proceeding)</p>
+              <p className="text-xs text-red-800 mt-2">Student data protection is non-negotiable. GDPR violations can result in £17.5M fines.</p>
+            </div>
+          </div>
+          <div className="flex justify-center my-3">
+            <ArrowDown className="w-8 h-8 text-green-500" />
+          </div>
+        </div>
+
+        <DecisionBox 
+          question="Security Clear?"
+          successText="0 critical vulnerabilities, GDPR compliant, safe to deploy"
+          errorText="Critical security issues: SQL injection, GDPR violations, vulnerable dependencies"
+          errorDest="STOP Pipeline → Stage 1 (MUST FIX)"
+        />
+
+        {/* Stage 6 */}
+        <StageBox 
+          stage="STAGE 6: DEPLOY TO STAGING"
+          env="AWS Elastic Beanstalk (Staging Environment)"
+          tools="AWS CodePipeline, Terraform, RDS, ElastiCache"
+          duration="10 minutes"
+          color="bg-gradient-to-br from-yellow-600 to-yellow-700"
+          items={[
+            "Infrastructure: 2x t3.medium EC2, RDS PostgreSQL (db.t3.medium), ElastiCache Redis",
+            "Database backup: AWS RDS snapshot created (safety before migrations)",
+            "Infrastructure as Code: Terraform applies staging configuration",
+            "Database migrations: Flyway/Liquibase with rollback scripts",
+            "Deploy application: Docker container to Elastic Beanstalk",
+            "Health checks: ALB verifies all instances healthy (3 consecutive passes)",
+            "Smoke tests: Critical endpoints verified (API, video streaming, assignments)",
+            "URL: https://staging.nul-elearning.ac.uk - Ready for UAT testing",
+            "Cost estimate: ~£148/month"
+          ]}
+          errors="Deployment failure, failed health checks → Auto-rollback to previous version → Back to Stage 4 (Testing)"
+        />
+
+        <DecisionBox 
+          question="UAT Pass?"
+          successText="IT staff tested successfully, ready for production approval"
+          errorText="Features not working, UX issues, performance problems"
+          errorDest="Loop back to Stage 4 (Testing)"
+        />
+
+        {/* Manual Approval Gate */}
+        <div className="mb-6">
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-2xl p-6 border-4 border-orange-800">
+            <div className="flex items-center gap-3 mb-3">
+              <AlertTriangle className="w-10 h-10 text-white" />
+              <h3 className="text-2xl font-bold text-white">🛑 MANUAL APPROVAL GATE</h3>
+            </div>
+            <p className="text-white text-lg mb-4">Required Before Production Deployment</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white rounded-lg p-4">
+                <h4 className="font-bold text-gray-900 mb-2">Approvers Required:</h4>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>✓ IT Manager (UAT sign-off)</li>
+                  <li>✓ Tech Lead (security review)</li>
+                  <li>✓ Head of IT (deployment timing approval)</li>
+                </ul>
+              </div>
+              
+              <div className="bg-white rounded-lg p-4">
+                <h4 className="font-bold text-gray-900 mb-2">Verification Checklist:</h4>
+                <ul className="text-sm text-gray-800 space-y-1">
+                  <li>✓ UAT testing complete in staging?</li>
+                  <li>✓ All security scans passed?</li>
+                  <li>✓ Deployment timing acceptable?</li>
+                  <li className="text-red-700 font-semibold">✗ NOT during exam periods!</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center my-3">
+            <ArrowDown className="w-8 h-8 text-green-500" />
+          </div>
+        </div>
+
+        <DecisionBox 
+          question="Deployment Approved?"
+          successText="All approvals granted, timing verified, proceed to production"
+          errorText="Approval rejected: timing issues, concerns raised, hold deployment"
+          errorDest="HOLD (no loop) - Wait for approval or fix issues"
+        />
+
+        {/* Stage 7 - Blue-Green */}
+        <div className="mb-6">
+          <div className="bg-gradient-to-br from-green-700 to-green-800 rounded-lg shadow-2xl p-6 border-2 border-gray-800">
+            <h3 className="text-3xl font-bold text-white mb-3">STAGE 7: PRODUCTION DEPLOYMENT (Blue-Green)</h3>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                📍 AWS Elastic Beanstalk (Production)
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                🔧 CodePipeline, ALB, CloudWatch, Lambda
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                ⏱️ 10 minutes
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm text-white">
+                🎯 ZERO DOWNTIME
+              </div>
+            </div>
+            
+            <div className="bg-white/10 rounded-lg p-4 mb-4">
+              <h4 className="font-bold text-white mb-2">Production Infrastructure:</h4>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-sm text-white">
+                <div>• EC2: 6x t3.large instances</div>
+                <div>• RDS Multi-AZ: db.m5.large (500GB)</div>
+                <div>• ElastiCache: 3x cache.r5.large</div>
+                <div>• CloudFront CDN: Global delivery</div>
+                <div>• WAF: DDoS protection</div>
+                <div>• Cost: ~£968/month</div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div className="bg-blue-500 rounded-lg p-4 border-2 border-blue-700">
+                <h4 className="font-bold text-white mb-2">💙 BLUE Environment (OLD)</h4>
+                <ul className="text-sm text-white space-y-1">
+                  <li>• Version: v1.2.2</li>
+                  <li>• Traffic: 100% → 90% → 50% → 0%</li>
+                  <li>• Status: Currently serving students</li>
+                  <li>• Instances: 6 running</li>
+                  <li>• Kept for 24h rollback ready</li>
+                </ul>
+              </div>
+              
+              <div className="bg-green-500 rounded-lg p-4 border-2 border-green-700">
+                <h4 className="font-bold text-white mb-2">💚 GREEN Environment (NEW)</h4>
+                <ul className="text-sm text-white space-y-1">
+                  <li>• Version: v1.2.3</li>
+                  <li>• Traffic: 0% → 10% → 50% → 100%</li>
+                  <li>• Status: Deploying new version</li>
+                  <li>• Instances: 6 new instances</li>
+                  <li>• Becomes BLUE after successful deployment</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="bg-white rounded-lg p-4">
+              <h4 className="font-bold text-gray-900 mb-3">Gradual Rollout Process:</h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-2">
+                  <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold">1</span>
+                  <span className="text-gray-800">Deploy to GREEN, run health checks (all 6 instances healthy)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold">2</span>
+                  <span className="text-gray-800"><b>Phase 1:</b> Shift 10% traffic to GREEN, monitor 2 minutes (error rate, response time)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold">3</span>
+                  <span className="text-gray-800"><b>Phase 2:</b> Shift 50% traffic to GREEN, monitor 2 minutes</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold">4</span>
+                  <span className="text-gray-800"><b>Phase 3:</b> Shift 100% traffic to GREEN (deployment complete)</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold">5</span>
+                  <span className="text-gray-800">GREEN becomes new BLUE (active production), old BLUE kept for 24h</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-red-200 border-4 border-red-800 rounded-lg p-4 mt-4">
+              <h4 className="font-bold text-red-900 text-lg mb-2">🚨 AUTOMATED ROLLBACK TRIGGERS:</h4>
+              <p className="text-sm text-red-900 mb-2">CloudWatch Alarms → Lambda Function → Instant Traffic Switch (&lt;30 seconds)</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                <div className="bg-white rounded p-2">
+                  <p className="font-semibold text-red-900">Error Rate &gt;5%</p>
+                  <p className="text-xs text-gray-700">→ Switch to BLUE</p>
+                </div>
+                <div className="bg-white rounded p-2">
+                  <p className="font-semibold text-red-900">Response Time &gt;5s</p>
+                  <p className="text-xs text-gray-700">→ Switch to BLUE</p>
+                </div>
+                <div className="bg-white rounded p-2">
+                  <p className="font-semibold text-red-900">Failed Health Checks</p>
+                  <p className="text-xs text-gray-700">→ Switch to BLUE</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center my-3">
+            <ArrowDown className="w-8 h-8 text-green-500" />
+          </div>
+        </div>
+
+        <DecisionBox 
+          question="Health Checks OK?"
+          successText="GREEN stable, metrics normal, proceed to verification"
+          errorText="Error rate >5%, Response time >5s, Health checks failing"
+          errorDest="AUTO-ROLLBACK to BLUE (<30s)"
+        />
+
+        {/* Stage 8 */}
+        <StageBox 
+          stage="STAGE 8: POST-DEPLOYMENT VERIFICATION"
+          env="Production (Live Environment)"
+          tools="Selenium, Newman, curl, Synthetic Monitoring"
+          duration="5 minutes"
+          color="bg-gradient-to-br from-teal-600 to-teal-700"
+          items={[
+            "Smoke Tests: Critical API endpoints (/health, /api/status, /api/videos)",
+            "E2E Critical Paths: Student (login→video→submit), Lecturer (login→upload→publish)",
+            "Performance validation: Response time <2s verified across all endpoints",
+            "Concurrent capacity: 500 simultaneous users test passed",
+            "CDN validation: Cache hit rate >80% confirmed",
+            "Security headers: HTTPS (TLS 1.3), HSTS, CSP, X-Frame-Options verified",
+            "CORS configuration: Proper origin restrictions checked"
+          ]}
+          errors="Critical feature broken, smoke tests fail → MANUAL ROLLBACK to BLUE immediately"
+        />
+
+        <DecisionBox 
+          question="Verified?"
+          successText="All checks passed, production confirmed healthy"
+          errorText="Critical issue discovered, feature not working"
+          errorDest="Manual rollback to BLUE"
+        />
+
+        {/* Stage 9 */}
+        <div className="mb-6">
+          <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg shadow-2xl p-6 border-2 border-black text-white">
+            <h3 className="text-2xl font-bold mb-3">STAGE 9: CONTINUOUS MONITORING & ALERTING (24/7)</h3>
+            <div className="flex flex-wrap gap-2 mb-4">
+              <div className="bg-white/20 rounded px-3 py-1 text-sm">
+                📍 All Environments (Dev, Staging, Production)
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm">
+                🔧 CloudWatch, Prometheus, Grafana, ELK, Datadog
+              </div>
+              <div className="bg-white/20 rounded px-3 py-1 text-sm">
+                ⏱️ Always Active
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+              <div className="bg-white/10 rounded-lg p-3">
+                <h4 className="font-bold text-yellow-300 mb-2">📊 APM (Application Performance)</h4>
+                <p className="text-xs text-gray-300 mb-1">Tools: Datadog, New Relic</p>
+                <ul className="text-sm space-y-1">
+                  <li>• Request rate, error rate, throughput</li>
+                  <li>• Response time: avg, p95, p99</li>
+                  <li>• Database query performance</li>
+                  <li>• API endpoint breakdown</li>
+                </ul>
+              </div>
+              
+              <div className="bg-white/10 rounded-lg p-3">
+                <h4 className="font-bold text-yellow-300 mb-2">🖥️ Infrastructure (Prometheus + Grafana)</h4>
+                <p className="text-xs text-gray-300 mb-1">Metrics collection & visualization</p>
+                <ul className="text-sm space-y-1">
+                  <li>• CPU, Memory, Disk, Network usage</li>
+                  <li>• Database connections, query stats</li>
+                  <li>• Auto-scaling events tracking</li>
+                  <li>• Container health (if K8s)</li>
+                </ul>
+              </div>
+              
+              <div className="bg-white/10 rounded-lg p-3">
+                <h4 className="font-bold text-yellow-300 mb-2">📄 Logs (ELK Stack)</h4>
+                <p className="text-xs text-gray-300 mb-1">Elasticsearch, Logstash, Kibana</p>
+                <ul className="text-sm space-y-1">
+                  <li>• Centralized log aggregation</li>
+                  <li>• Error pattern detection</li>
+                  <li>• Search capabilities for debugging</li>
+                  <li>• Audit trail for GDPR compliance</li>
+                </ul>
+              </div>
+              
+              <div className="bg-white/10 rounded-lg p-3">
+                <h4 className="font-bold text-yellow-300 mb-2">👥 Real User Monitoring (RUM)</h4>
+                <p className="text-xs text-gray-300 mb-1">Actual student experience tracking</p>
+                <ul className="text-sm space-y-1">
+                  <li>• Page load times by geography</li>
+                  <li>• Video buffering issues detection</li>
+                  <li>• User interaction delays</li>
+                  <li>• JavaScript errors in production</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="bg-green-900/50 rounded-lg p-4 mb-4">
+              <h4 className="font-bold text-green-300 mb-2">🌱 Sustainability Metrics (UN SDG Alignment)</h4>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                <div>• Energy per transaction: 0.42 Wh</div>
+                <div>• Carbon footprint: 0.18g CO2e/request</div>
+                <div>• Resource efficiency tracking</div>
+                <div>• Auto-scaling optimization</div>
+              </div>
+              <p className="text-xs text-green-200 mt-2">SDG 7 (Clean Energy), SDG 12 (Responsible Consumption), SDG 13 (Climate Action)</p>
+            </div>
+            
+            <div className="bg-white rounded-lg p-4">
+              <h4 className="font-bold text-gray-900 mb-3">🚨 Alert Routing & Incident Management:</h4>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-2 text-xs">
+                <div className="bg-red-600 text-white rounded p-2 text-center">
+                  <p className="font-bold">P0 CRITICAL</p>
+                  <p className="text-red-100">Platform down</p>
+                  <p className="mt-1">→ PagerDuty call</p>
+                  <p className="text-red-200">Response: Immediate</p>
+                </div>
+                <div className="bg-orange-600 text-white rounded p-2 text-center">
+                  <p className="font-bold">P1 HIGH</p>
+                  <p className="text-orange-100">Core feature broken</p>
+                  <p className="mt-1">→ Slack alert</p>
+                  <p className="text-orange-200">SLA: 30 minutes</p>
+                </div>
+                <div className="bg-yellow-600 text-white rounded p-2 text-center">
+                  <p className="font-bold">P2 MEDIUM</p>
+                  <p className="text-yellow-100">Performance degraded</p>
+                  <p className="mt-1">→ Email</p>
+                  <p className="text-yellow-200">SLA: 2 hours</p>
+                </div>
+                <div className="bg-blue-600 text-white rounded p-2 text-center">
+                  <p className="font-bold">P3 LOW</p>
+                  <p className="text-blue-100">Minor issues</p>
+                  <p className="mt-1">→ Dashboard</p>
+                  <p className="text-blue-200">SLA: Next day</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center my-3">
+            <ArrowDown className="w-8 h-8 text-green-500" />
+          </div>
+        </div>
+
+        {/* Live Status */}
+        <div className="flex justify-center mb-6">
+          <div className="bg-green-500 rounded-full w-32 h-32 flex items-center justify-center shadow-2xl border-4 border-green-700">
+            <div className="text-center">
+              <p className="text-white text-3xl font-bold">LIVE</p>
+              <p className="text-white text-xs">15,000 students</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Feedback Loop */}
+        <div className="bg-blue-50 border-2 border-blue-500 rounded-xl p-6 mb-8">
+          <h3 className="text-xl font-bold text-blue-900 mb-3 flex items-center gap-2">
+            <GitBranch className="w-6 h-6" />
+            🔄 Continuous Feedback Loop
+          </h3>
+          <p className="text-sm text-blue-800 mb-3">
+            Monitoring (Stage 9) → Detect issues → Create backlog tickets → Prioritize → Assign to developer → Back to Stage 1 (new development cycle)
+          </p>
+          <div className="bg-white rounded-lg p-4">
+            <p className="text-sm font-semibold text-gray-900 mb-2">Example:</p>
+            <p className="text-sm text-gray-700">
+              CloudWatch detects slow video upload (response time 8s) → P2 alert → Create ticket JIRA-1234 → 
+              Developer optimizes code → feature/optimize-upload → PR → Full pipeline → Deploy → Monitor confirms fix → Ticket closed
+            </p>
+          </div>
+        </div>
+
+        {/* Summary */}
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl shadow-2xl p-8 text-white text-center">
+          <h2 className="text-3xl font-bold mb-4">✅ Pipeline Complete!</h2>
+          <p className="text-xl mb-6">NUL E-Learning Platform - Serving 15,000 Students</p>
+          
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="bg-white/10 rounded-lg p-4">
+              <p className="text-3xl font-bold">9</p>
+              <p className="text-sm">Stages</p>
+            </div>
+            <div className="bg-white/10 rounded-lg p-4">
+              <p className="text-3xl font-bold">99.9%</p>
+              <p className="text-sm">Uptime</p>
+            </div>
+            <div className="bg-white/10 rounded-lg p-4">
+              <p className="text-3xl font-bold">&lt;2s</p>
+              <p className="text-sm">Response</p>
+            </div>
+            <div className="bg-white/10 rounded-lg p-4">
+              <p className="text-3xl font-bold">0</p>
+              <p className="text-sm">Downtime</p>
+            </div>
+            <div className="bg-white/10 rounded-lg p-4">
+              <p className="text-3xl font-bold">WCAG AA</p>
+              <p className="text-sm">Compliant</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default ProfessionalDiagram;
